@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jose</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0e0e0e; --surface: #161616; --border: #2a2a2a;
+    --accent: #c8a96e; --accent-dim: #9e7f4a; --text: #f0ece4; --muted: #888;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 999; opacity: 0.4; }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 6rem 8vw 4rem; position: relative; }
+  .hero-line { width: 2px; height: 80px; background: linear-gradient(to bottom, transparent, var(--accent)); margin-bottom: 2rem; animation: grow 1s ease forwards; transform-origin: top; }
+  @keyframes grow { from { transform: scaleY(0); opacity: 0; } to { transform: scaleY(1); opacity: 1; } }
+  .hero-eyebrow { font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.8s 0.3s ease forwards; }
+  .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(5rem, 14vw, 11rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.02em; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.5s ease forwards; }
+  .hero-name span { color: var(--accent); font-style: italic; }
+  .hero-tagline { font-size: 1.05rem; color: var(--muted); font-weight: 300; max-width: 420px; line-height: 1.7; margin-bottom: 3.5rem; opacity: 0; animation: fadeUp 0.8s 0.7s ease forwards; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .btn-group { display: flex; flex-wrap: wrap; gap: 1rem; opacity: 0; animation: fadeUp 0.8s 0.9s ease forwards; }
+  .btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.8rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em; cursor: pointer; transition: all 0.25s ease; position: relative; overflow: hidden; }
+  .btn::after { content: ''; position: absolute; inset: 0; background: var(--accent); transform: translateY(100%); transition: transform 0.25s ease; z-index: 0; }
+  .btn span { position: relative; z-index: 1; }
+  .btn:hover { color: #0e0e0e; border-color: var(--accent); }
+  .btn:hover::after { transform: translateY(0); }
+  .btn-icon { font-size: 1rem; position: relative; z-index: 1; }
+  .btn.active { background: var(--accent); color: #0e0e0e; border-color: var(--accent); }
+  .panel { display: none; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 4rem 8vw; animation: panelIn 0.4s ease forwards; }
+  .panel.visible { display: block; }
+  @keyframes panelIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  .panel-inner { max-width: 760px; }
+  .panel-label { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 2.5rem; }
+  .cards { display: grid; gap: 1.25rem; }
+  .card { background: var(--bg); border: 1px solid var(--border); padding: 1.75rem 2rem; transition: border-color 0.2s; }
+  .card:hover { border-color: var(--accent-dim); }
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; gap: 1rem; }
+  .card-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; }
+  .card-date { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.05em; white-space: nowrap; margin-top: 0.2rem; }
+  .card-sub { font-size: 0.8rem; color: var(--accent-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+  .card-body { font-size: 0.9rem; color: var(--muted); line-height: 1.75; font-weight: 300; }
+  .tag { display: inline-block; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; background: #1e1e1e; border: 1px solid var(--border); color: var(--accent-dim); padding: 0.25rem 0.65rem; margin-top: 0.85rem; margin-right: 0.4rem; }
+  footer { padding: 2.5rem 8vw; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  footer span { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+  .footer-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; display: inline-block; margin-right: 0.5rem; }
+  .hero-deco { position: absolute; right: 8vw; top: 50%; transform: translateY(-50%); font-family: 'Playfair Display', serif; font-size: clamp(10rem, 22vw, 22rem); font-weight: 900; font-style: italic; color: transparent; -webkit-text-stroke: 1px #2a2a2a; letter-spacing: -0.05em; pointer-events: none; user-select: none; opacity: 0; animation: fadeIn 1.2s 1s ease forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @media (max-width: 600px) { .hero-deco { display: none; } .hero { padding: 5rem 6vw 3rem; } .panel { padding: 3rem 6vw; } }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-line"></div>
+  <p class="hero-eyebrow">FBLA Member</p>
+  <h1 class="hero-name">Jo<span>se</span></h1>
+  <p class="hero-tagline">Future Business Leader. Community Volunteer. Competitor. Explore my involvement, service, and achievements in FBLA below.</p>
+  <div class="btn-group">
+    <button class="btn" onclick="toggle('experience')" id="btn-experience">
+      <span class="btn-icon">◈</span><span>Experience</span>
+    </button>
+    <button class="btn" onclick="toggle('clubs')" id="btn-clubs">
+      <span class="btn-icon">◈</span><span>Involvement</span>
+    </button>
+    <button class="btn" onclick="toggle('awards')" id="btn-awards">
+      <span class="btn-icon">◈</span><span>Competitions & Awards</span>
+    </button>
+  </div>
+  <div class="hero-deco">J</div>
+</section>
+
+<!-- EXPERIENCE -->
+<div id="panel-experience" class="panel">
+  <div class="panel-inner">
+    <p class="panel-label">Experience</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">FBLA Member</div>
+            <div class="card-sub">Future Business Leaders of America</div>
+          </div>
+          <div class="card-date">1 Year</div>
+        </div>
+        <div class="card-body">Active member of FBLA for one year, participating in leadership conferences, competitive events, and community service initiatives. Developed skills in business, technology, and collaborative leadership through hands-on experiences at both the regional and state level.</div>
+        <span class="tag">Leadership</span>
+        <span class="tag">Business</span>
+        <span class="tag">Community</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INVOLVEMENT -->
+<div id="panel-clubs" class="panel">
+  <div class="panel-inner">
+    <p class="panel-label">Involvement</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Region Leadership Conference</div>
+            <div class="card-sub">FBLA — Regional Level</div>
+          </div>
+          <div class="card-date">2025</div>
+        </div>
+        <div class="card-body">Attended and participated in the FBLA Region Leadership Conference, engaging in workshops, networking with peers, and developing leadership skills alongside fellow members from across the region.</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">State Leadership Conference</div>
+            <div class="card-sub">FBLA — State Level</div>
+          </div>
+          <div class="card-date">2026</div>
+        </div>
+        <div class="card-body">Represented my chapter at the FBLA State Leadership Conference, competing and collaborating with top members from across the state in a high-energy professional environment.</div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Community Service — Notes for Firefighters & Nursing Homes</div>
+            <div class="card-sub">Service Events</div>
+          </div>
+          <div class="card-date">2025 – 2026</div>
+        </div>
+        <div class="card-body">Participated in multiple note-making service events, writing encouraging and heartfelt messages for local firefighters and nursing home residents to brighten their day and show community appreciation.</div>
+        <span class="tag">Service</span>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Community Donations — Food & Books</div>
+            <div class="card-sub">Service Events</div>
+          </div>
+          <div class="card-date">2025 – 2026</div>
+        </div>
+        <div class="card-body">Contributed to community donation drives by collecting and donating candy, canned foods, and books to those in need — helping make a tangible difference for local families and individuals.</div>
+        <span class="tag">Service</span>
+        <span class="tag">Donations</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPETITIONS & AWARDS -->
+<div id="panel-awards" class="panel">
+  <div class="panel-inner">
+    <p class="panel-label">Competitions & Awards</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Data Science & Artificial Intelligence</div>
+            <div class="card-sub">FBLA Competitive Event</div>
+          </div>
+          <div class="card-date">2025 – 2026</div>
+        </div>
+        <div class="card-body">Competed in the Data Science & AI objective test, demonstrating knowledge of modern data practices, machine learning concepts, and the role of artificial intelligence in today's business landscape.</div>
+        <span class="tag">Data Science</span><span class="tag">AI</span>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Introduction to Information Technology</div>
+            <div class="card-sub">FBLA Competitive Event</div>
+          </div>
+          <div class="card-date">2025</div>
+        </div>
+        <div class="card-body">Took the Intro to IT objective test, covering foundational topics in computer hardware, software, networking, and digital literacy.</div>
+        <span class="tag">Technology</span>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Data Analysis — Semi-Finalists</div>
+            <div class="card-sub">FBLA Team Competitive Event</div>
+          </div>
+          <div class="card-date">2026</div>
+        </div>
+        <div class="card-body">Competed as part of a team in the Data Analysis event, making it all the way to the semi-finals. Collaborated to interpret real-world datasets, draw meaningful conclusions, and present findings in a professional format.</div>
+        <span class="tag">Team Event</span><span class="tag">Semi-Finalists</span>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Business Achievement Award — Contributor Level</div>
+            <div class="card-sub">BAA Recognition</div>
+          </div>
+          <div class="card-date">2025</div>
+        </div>
+        <div class="card-body">Earned the FBLA Business Achievement Award at the Contributor level, recognizing dedication to personal and professional development through completing a structured series of business and leadership activities.</div>
+        <span class="tag">BAA</span><span class="tag">Contributor Level</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span><span class="footer-dot"></span>Jose &mdash; FBLA Portfolio</span>
+  <span style="font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;">Future Business Leaders of America</span>
+</footer>
+
+<script>
+  let current = null;
+  function toggle(id) {
+    const panel = document.getElementById('panel-' + id);
+    const btn = document.getElementById('btn-' + id);
+    if (current && current !== id) {
+      document.getElementById('panel-' + current).classList.remove('visible');
+      document.getElementById('btn-' + current).classList.remove('active');
+    }
+    if (current === id) {
+      panel.classList.remove('visible');
+      btn.classList.remove('active');
+      current = null;
+    } else {
+      panel.classList.add('visible');
+      btn.classList.add('active');
+      current = id;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+</script>
+</body>
+</html>
